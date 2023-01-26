@@ -1,6 +1,8 @@
 package com.avengers.StudentManagement;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -46,8 +48,11 @@ public class StudentController {
     @Autowired
     StudentService studentService;
     @GetMapping("/get_student")
-    public Student getStudent(@RequestParam("admnNo") int admnNo){
-        return studentService.getStudent(admnNo);
+    public ResponseEntity getStudent(@RequestParam("admnNo") int admnNo){
+        // return studentService.getStudent(admnNo);
+        // return new ResponseEntity<>(studentService.getStudent(admnNo), HttpStatus.FOUND);
+        Student response = studentService.getStudent(admnNo);
+        return new ResponseEntity<>(response, HttpStatus.FOUND);
     }
      // get details with name
 //    @GetMapping("/get_student/{name}")
@@ -59,16 +64,25 @@ public class StudentController {
     // postmapping is a annotation, because add student is a post request
         // that why is a postmapping, with path "/add_student
     @PostMapping("/add_student")
-    public String addStudent(@RequestBody Student student){
-        return studentService.addStudent(student);
+    public ResponseEntity addStudent(@RequestBody Student student){
+        String response =  studentService.addStudent(student);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/delete_student/{admnNo}")
-    public String deleteStudent(@PathVariable("admnNo") int admnNo){
-        return studentService.deleteStudent(admnNo);
+    public ResponseEntity deleteStudent(@PathVariable("admnNo") int admnNo){
+        String response = studentService.deleteStudent(admnNo);
+        if (response.equals("Invalid id")){
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(response, HttpStatus.FOUND);
     }
     @PutMapping("/update_student")
-    public String updateStudent(@RequestParam("admnNo") int admnNo, @RequestBody Student student){
-        return studentService.updateStudent(admnNo, student);
+    public ResponseEntity updateStudent(@RequestParam("admnNo") int admnNo, @RequestBody Student student){
+        String response =  studentService.updateStudent(admnNo, student);
+        if (!response.equals(null)){
+            return new ResponseEntity<>(response, HttpStatus.FOUND);
+        }
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }

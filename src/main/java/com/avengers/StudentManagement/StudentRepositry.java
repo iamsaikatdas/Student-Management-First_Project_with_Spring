@@ -15,9 +15,6 @@ public class StudentRepositry {
     // eakhne sudu db related logic e thakbe, jemon student details update, delete, add, get all details like that.
 
     public Student getStudent(int id){
-        if (db.isEmpty())
-            System.out.println("Not found any student details, please update student details");
-
         return db.get(id);
     }
 
@@ -41,7 +38,7 @@ public class StudentRepositry {
 
     public String updateStudent(int admnNo, Student student){
         if (!db.containsKey(admnNo))
-            return "Invalid id";
+            return "Invalid id, Please do with correct id.";
 
          db.get(admnNo).setAddress(student.getAddress());
          db.get(admnNo).setAge(student.getAge());

@@ -10,8 +10,11 @@ public class StudentService {
     // 2. second work.
     @Autowired
     StudentRepositry studentRepositry;
-
+    String sk = "";
     public Student getStudent(int id){
+        if(!studentRepositry.db.containsKey(id)) {
+            return null;
+        }
         return studentRepositry.getStudent(id);
     }
 
